@@ -1,4 +1,6 @@
-#include QMK_KEYBOARD_H
+#include "iris.h"
+#include "action_layer.h"
+#include "eeconfig.h"
 
 extern keymap_config_t keymap_config;
 
@@ -50,7 +52,3 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TRNS,KC_TRNS,KC_APP,           KC_INS,KC_TRNS,KC_TRNS
   ),
 };
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  return true;
-}
