@@ -1,6 +1,4 @@
 #include QMK_KEYBOARD_H
-#include "debug.h"
-#include "action_layer.h"
 #include "version.h"
 
 #define LETR 0 // letters
@@ -8,6 +6,7 @@
 #define SYMB 2 // symbols
 #define NUMP 3 // num pad
 #define MOUS 4 // mouse control
+#define GAME 5 // mouse control
 
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
@@ -17,9 +16,8 @@ enum custom_keycodes {
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-
 [LETR] = LAYOUT_ergodox(
-  KC_ESCAPE,RSFT(KC_1),RSFT(KC_2),RSFT(KC_3),RSFT(KC_4),RSFT(KC_5),KC_PSCREEN,
+  KC_ESCAPE,KC_1,KC_2,KC_3,KC_4,KC_5,KC_PSCREEN,
   KC_NO,KC_Q,KC_W,KC_E,KC_R,KC_T,KC_NO,
   KC_LSHIFT,CTL_T(KC_A),SFT_T(KC_S),ALT_T(KC_D),ALGR_T(KC_F),RWIN_T(KC_G),
   KC_LCTRL,KC_Z,KC_X,KC_C,KC_V,KC_B,KC_NO,
@@ -30,7 +28,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_SPACE,KC_BSPACE,KC_NO,
 
 
-  KC_NO,RSFT(KC_6),RSFT(KC_7),RSFT(KC_8),RSFT(KC_9),RSFT(KC_0),LGUI(KC_L),
+  KC_NO,KC_6,KC_7,KC_8,KC_9,KC_0,LGUI(KC_L),
   KC_NO,KC_Y,KC_U,KC_I,KC_O,KC_P,KC_NO,
   RWIN_T(KC_H),ALGR_T(KC_J),ALT_T(KC_K),SFT_T(KC_L),RCTL_T(KC_SCLN),KC_RSHIFT,
   KC_NO,KC_N,KC_M,KC_COMM,KC_DOT,KC_SLSH,KC_RCTRL,
@@ -76,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_APP,KC_DELETE,KC_NO,
 
 
-  KC_NO,KC_F6,KC_F7,KC_F8,KC_F9,KC_F10,KC_NO,
+  KC_NO,KC_F6,KC_F7,KC_F8,KC_F9,KC_F10,TG(5),
   KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,
   KC_LGUI,KC_RALT,KC_LALT,KC_RSHIFT,KC_RCTRL,KC_NO,
   KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,KC_NO,
@@ -132,28 +130,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_NO,
   KC_NO,KC_PSCREEN,KC_INS
   ),
-};
+[GAME] = LAYOUT_ergodox(
+  KC_ESCAPE,KC_1,KC_2,KC_3,KC_4,KC_5,KC_NO,
+  KC_TAB,KC_Q,KC_W,KC_E,KC_R,KC_T,KC_NO,
+  KC_GRV,KC_A,KC_S,KC_D,KC_F,KC_G,
+  KC_LSHIFT,KC_Z,KC_X,KC_C,KC_V,KC_B,KC_NO,
+  KC_LCTRL,KC_LGUI,KC_LALT,MO(3),MO(1),
 
-const uint16_t PROGMEM fn_actions[] = {
-    [1] = ACTION_LAYER_TAP_TOGGLE(SYMB)                // FN1 - Momentary Layer 1 (Symbols)
-};
+  KC_NO,KC_NO,
+  KC_NO,
+  KC_SPACE,KC_BSPACE,KC_NO,
 
-const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
-{
-  // MACRODOWN only works in this function
-      switch(id) {
-        case 0:
-        if (record->event.pressed) {
-          SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
-        }
-        break;
-        case 1:
-        if (record->event.pressed) { // For resetting EEPROM
-          eeconfig_init();
-        }
-        break;
-      }
-    return MACRO_NONE;
+
+  KC_NO,KC_6,KC_7,KC_8,KC_9,KC_0,TG(5),
+  KC_NO,KC_Y,KC_U,KC_I,KC_O,KC_P,KC_RALT,
+  KC_H,KC_J,KC_K,KC_L,KC_SCLN,KC_RSHIFT,
+  KC_NO,KC_N,KC_M,KC_COMM,KC_DOT,KC_SLSH,KC_RCTRL,
+  MO(2),MO(4),KC_RALT,KC_TRNS,KC_TRNS,
+
+  KC_NO,KC_NO,
+  KC_NO,
+  KC_NO,KC_TAB,KC_ENTER
+  ),
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -216,4 +214,5 @@ void matrix_scan_user(void) {
     } else {
         ergodox_right_led_3_off();
     }
+
 };
